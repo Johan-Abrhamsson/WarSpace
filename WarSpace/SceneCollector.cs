@@ -2,7 +2,7 @@ using System.Reflection.PortableExecutable;
 using System.Collections.Generic;
 using System;
 
-public static class SceneCollector
+public class SceneCollector
 {
     Dictionary<string, Scene> scenes = new Dictionary<string, Scene>();
 
