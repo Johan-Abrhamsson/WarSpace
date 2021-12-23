@@ -2,29 +2,29 @@ using System.Reflection.PortableExecutable;
 using System.Collections.Generic;
 using System;
 
-public class SceneCollector
+public static class SceneCollector
 {
     Dictionary<string, Scene> scenes = new Dictionary<string, Scene>();
 
     Start start = new Start();
 
-    public string currentScene {get; set;}
-
+    public string CurrentScene { get; set; }
+    
     public SceneCollector()
     {
-        currentScene = "Start";
+        CurrentScene = "Start";
         scenes.Add("Start", start);
     }
 
     public void PlayScene()
     {
-        scenes[currentScene].Draw();
-        scenes[currentScene].Update();
+        scenes[CurrentScene].Draw();
+        scenes[CurrentScene].Update();
     }
 
-    public void AddScene()
+    public void AddScene(string name, Scene scene)
     {
-
+        scenes.Add(name, scene);
     }
 
 
