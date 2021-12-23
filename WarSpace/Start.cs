@@ -122,7 +122,7 @@ public class Start : Scene
                 {
                     case "Start Game":
                         // I NEED TO FIX THIS AHHH!
-                        Program.GameStart.group.AddScene("StartGameMenu", new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }));
+                        WarSpace.Program.startingGame.group.AddScene("StartGameMenu", new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }));
                         //group.CurrentScene = "StartGameMenu";
                         break;
                     case "Settings":

@@ -1,12 +1,12 @@
 using System;
 
-public static class GameStart
+public class GameStart
 {
     Screen mainWindow = new Screen(1280, 900);
 
-    static SceneCollector group = new SceneCollector();
+    public SceneCollector group = new SceneCollector();
 
-    public GameStart()
+    public void Start()
     {
         mainWindow.Run(group);
 
