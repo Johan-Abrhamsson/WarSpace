@@ -6,14 +6,18 @@ public class SceneCollector
 {
     Dictionary<string, Scene> scenes = new Dictionary<string, Scene>();
 
+    List<string> nameList = new List<string>();
+
     Start start = new Start();
 
     public string CurrentScene { get; set; }
-    
+
+    int checkValue = 0;
+
     public SceneCollector()
     {
         CurrentScene = "Start";
-        scenes.Add("Start", start);
+        this.AddScene("Start", start);
     }
 
     public void PlayScene()
@@ -24,8 +28,18 @@ public class SceneCollector
 
     public void AddScene(string name, Scene scene)
     {
-        scenes.Add(name, scene);
+        for (int i = 0; i < nameList.Count; i++)
+        {
+            if (name != nameList[i])
+            {
+                checkValue++;
+            }
+        }
+        if (checkValue == nameList.Count)
+        {
+            scenes.Add(name, scene);
+            nameList.Add(name);
+        }
+        checkValue = 0;
     }
-
-
 }

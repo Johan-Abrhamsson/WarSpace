@@ -10,7 +10,7 @@ using System.Collections.Generic;
 public class Start : Scene
 {
 
-    Rocket mainRocket = new Rocket(new Vector2(0, 0), 0, false);
+    Rocket mainRocket = new Rocket(new Vector2(0, 0), 0, false, "-");
 
     bool keyhole = false;
 
@@ -20,7 +20,7 @@ public class Start : Scene
 
     ClickBox settings = new ClickBox("Settings", 0, 0, 0, 0, Color.WHITE, Color.YELLOW);
 
-    ClickBox colour = new ClickBox("Colour", 0, 0, 0, 0, Color.WHITE, Color.BLUE);
+    ClickBox colour = new ClickBox("Advanced", 0, 0, 0, 0, Color.WHITE, Color.BLUE);
 
     ClickBox multiplayer = new ClickBox("Mutiplayer", 0, 0, 0, 0, Color.WHITE, Color.GREEN);
 
@@ -121,15 +121,16 @@ public class Start : Scene
                 switch (buttons[i].GetText())
                 {
                     case "Start Game":
-                        // I NEED TO FIX THIS AHHH!
-                        WarSpace.Program.startingGame.group.AddScene("StartGameMenu", new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }));
-                        //group.CurrentScene = "StartGameMenu";
+                        Program.startingGame.group.AddScene("StartGameMenu", new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }));
+                        Program.startingGame.group.CurrentScene = "StartGameMenu";
                         break;
                     case "Settings":
-
+                        Program.startingGame.group.AddScene("SettingsMenu", new OtherScene(new List<ClickBox>() { resolution, asteroids, back }));
+                        Program.startingGame.group.CurrentScene = "SettingsMenu";
                         break;
-                    case "Color":
-                        //Change colour
+                    case "Advanced":
+                        //Program.startingGame.group.AddScene("AdvancedMenu", new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }));
+                        //Program.startingGame.group.CurrentScene = "AdvancedMenu";
                         break;
                 }
             }

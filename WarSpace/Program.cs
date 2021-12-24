@@ -1,14 +1,9 @@
 ﻿using System;
-
-
-namespace WarSpace
+static class Program
 {
-    static class Program
+    public static GameStart startingGame = new GameStart();
+    static void Main(string[] args)
     {
-        public static GameStart startingGame = new GameStart();
-        static void Main(string[] args)
-        {
-            startingGame.Start();
-        }
+        startingGame.Start();
     }
 }

@@ -2,6 +2,7 @@ using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Raylib_cs;
 
 public class OtherScene : Scene
 {
@@ -11,13 +12,10 @@ public class OtherScene : Scene
     public OtherScene(List<ClickBox> newButtons)
     {
         this.buttons = newButtons;
-        distance = (int.Parse(WindowSize[1]) * 0.75f) / buttons.Count;
+        distance = (int.Parse(WindowSize[1]) / 2) / buttons.Count;
         for (int i = 0; i <= buttons.Count - 1; i++)
         {
-            Console.WriteLine(buttons[i].GetText());
-            Console.WriteLine(buttons[i]);
-            Console.WriteLine(i);
-            buttons[i].ChangeClickBoxPos(new Vector2((int.Parse(WindowSize[0])) / 5, ((int.Parse(WindowSize[0])) * 0.25f) + i * distance));
+            buttons[i].ChangeClickBoxPos(new Vector2((int.Parse(WindowSize[0])) / 7, ((int.Parse(WindowSize[0])) / 5) + (i * distance)));
         }
     }
 
@@ -32,5 +30,32 @@ public class OtherScene : Scene
     public override void Update()
     {
         base.Update();
+        Buttoncheck();
+    }
+
+    void Buttoncheck()
+    {
+        Vector2 mousePos = Raylib.GetMousePosition();
+
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            buttons[i].ClickBoxColorHover(mousePos.X, mousePos.Y);
+            if (buttons[i].Check(mousePos.X, mousePos.Y) == true)
+            {
+                switch (buttons[i].GetText())
+                {
+                    case "Mutiplayer":
+                        Program.startingGame.group.AddScene("Battle", new Battle("player1", "player2"));
+                        Program.startingGame.group.CurrentScene = "Battle";
+                        break;
+                    case "Settings":
+
+                        break;
+                    case "Back":
+                        Program.startingGame.group.CurrentScene = "Start";
+                        break;
+                }
+            }
+        }
     }
 }

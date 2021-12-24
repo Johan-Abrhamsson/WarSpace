@@ -10,6 +10,8 @@ public class Scene
     protected Random generator = new Random();
     protected string[] WindowSize = File.ReadAllLines(@"resolution.txt");
 
+    protected int ticker = 0;
+
     public Scene()
     {
         totalStars = generator.Next((int.Parse(WindowSize[0]) * int.Parse(WindowSize[1])) / (3 * int.Parse(WindowSize[0]) + 3 * int.Parse(WindowSize[1])), int.Parse(WindowSize[0]) * int.Parse(WindowSize[1]) / (2 * int.Parse(WindowSize[0]) + 2 * int.Parse(WindowSize[1])));
@@ -23,7 +25,7 @@ public class Scene
 
     virtual public void Update()
     {
-
+        ticker++;
     }
     virtual public void Draw()
     {
