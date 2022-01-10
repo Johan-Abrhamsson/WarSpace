@@ -5,16 +5,15 @@ public class Force
 {
     float Strength;
 
-    float angle;
+    Vector2 rotation;
 
     Vector2 force;
 
-    public Force(float newStrength, float newAngle)
+    public Force(float newStrength, Vector2 rotation)
     {
         this.Strength = newStrength;
-        this.angle = newAngle;
-        force.X = (float)Math.Cos(angle) * Strength;
-        force.Y = (float)Math.Sin(angle) * Strength;
+        this.rotation = rotation;
+        force = rotation * new Vector2(Strength, Strength);
     }
 
     public Vector2 GetForce()

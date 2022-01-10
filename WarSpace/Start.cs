@@ -72,7 +72,7 @@ public class Start : Scene
         asteroids.ChangeClickBoxSize(new Vector2(int.Parse(WindowSize[0]) / 9, int.Parse(WindowSize[1]) / 9));
 
         //Force on Rocket
-        mainRocket.AppledForce(new Force(int.Parse(WindowSize[0]) / 100, 0));
+        mainRocket.AppledForce(new Force(int.Parse(WindowSize[0]) / 100, new Vector2(1, 0)));
 
     }
 
@@ -121,12 +121,10 @@ public class Start : Scene
                 switch (buttons[i].GetText())
                 {
                     case "Start Game":
-                        Program.startingGame.group.AddScene("StartGameMenu", new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }));
-                        Program.startingGame.group.CurrentScene = "StartGameMenu";
+                        Program.startingGame.group.AddScene(new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }));
                         break;
                     case "Settings":
-                        Program.startingGame.group.AddScene("SettingsMenu", new OtherScene(new List<ClickBox>() { resolution, asteroids, back }));
-                        Program.startingGame.group.CurrentScene = "SettingsMenu";
+                        Program.startingGame.group.AddScene(new OtherScene(new List<ClickBox>() { resolution, asteroids, back }));
                         break;
                     case "Advanced":
                         //Program.startingGame.group.AddScene("AdvancedMenu", new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }));

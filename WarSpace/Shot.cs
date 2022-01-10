@@ -2,46 +2,40 @@ using System;
 using System.Numerics;
 using Raylib_cs;
 
-public class Shot
+public class Shot : Object
 {
-    Vector2 position;
 
-    Vector2 speed = new Vector2(0, 0);
+    string playerPolarity = "";
 
-    Vector2 rotation = new Vector2((float)Math.Cos(0), (float)Math.Sin(0));
-
-    float radius = 3;
-
-    public Shot(Vector2 position, Vector2 speed, Vector2 rotation)
+    public Shot(Vector2 position, Vector2 speed, Vector2 rotation, string playerPolarity)
     {
+        radius = 5;
         this.position = position;
         this.speed = speed;
         this.rotation = rotation;
+        this.playerPolarity = playerPolarity;
+        if (playerPolarity == "player1")
+        {
+            color = Color.ORANGE;
+        }
+        else
+        {
+            color = Color.YELLOW;
+        }
     }
 
     public void DrawShot()
     {
-        Raylib.DrawCircleV(position, radius, Color.YELLOW);
+        Raylib.DrawCircleV(position, radius, color);
     }
 
     public void ShotRun()
     {
-        position += speed * rotation;
+        position.X += speed.X;
+        position.Y += speed.Y;
     }
-
-    public Vector2 GetPosition()
+    public string GetPolarity()
     {
-        return position;
-    }
-
-    public float GetSize()
-    {
-        return radius;
-    }
-
-    public Vector2 AppledForce(Force force)
-    {
-        speed += force.GetForce();
-        return speed;
+        return playerPolarity;
     }
 }

@@ -4,42 +4,27 @@ using System;
 
 public class SceneCollector
 {
-    Dictionary<string, Scene> scenes = new Dictionary<string, Scene>();
-
-    List<string> nameList = new List<string>();
+    List<Scene> scenes = new List<Scene>();
 
     Start start = new Start();
 
-    public string CurrentScene { get; set; }
-
-    int checkValue = 0;
+    int currentScene;
 
     public SceneCollector()
     {
-        CurrentScene = "Start";
-        this.AddScene("Start", start);
+        currentScene = -1;
+        this.AddScene(start);
     }
 
     public void PlayScene()
     {
-        scenes[CurrentScene].Draw();
-        scenes[CurrentScene].Update();
+        scenes[currentScene].Draw();
+        scenes[currentScene].Update();
     }
 
-    public void AddScene(string name, Scene scene)
+    public void AddScene(Scene scene)
     {
-        for (int i = 0; i < nameList.Count; i++)
-        {
-            if (name != nameList[i])
-            {
-                checkValue++;
-            }
-        }
-        if (checkValue == nameList.Count)
-        {
-            scenes.Add(name, scene);
-            nameList.Add(name);
-        }
-        checkValue = 0;
+        scenes.Add(scene);
+        currentScene++;
     }
 }

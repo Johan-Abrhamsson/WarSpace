@@ -9,7 +9,6 @@ public class Scene
     protected List<Star> Starcollection = new List<Star>();
     protected Random generator = new Random();
     protected string[] WindowSize = File.ReadAllLines(@"resolution.txt");
-
     protected int ticker = 0;
 
     public Scene()

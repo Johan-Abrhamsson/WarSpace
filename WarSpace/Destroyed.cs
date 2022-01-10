@@ -1,41 +1,26 @@
 using System.Numerics;
 using System;
+using Raylib_cs;
 
 
-public class Destroyed
+public class Destroyed : Object
 {
-
-    Vector2 position;
-
-    float radius = 3;
-
-    Vector2 speed = new Vector2(0, 0);
-
-    Vector2 rotation = new Vector2((float)Math.Cos(0), (float)Math.Sin(0));
-
-    Random generator = new Random();
-
     public Destroyed(Vector2 position, Vector2 speed, Vector2 rotation)
     {
+        radius = generator.Next(1, 6);
         this.position = position;
-        this.speed.X = speed.X + generator.Next(-2, 2);
-        this.speed.Y = speed.Y + generator.Next(-2, 2);
-        this.rotation.X = rotation.X + generator.Next(-1, 1);
-        this.rotation.Y = rotation.Y + generator.Next(-1, 1);
+        this.speed.X = speed.X + generator.Next(-2, 5);
+        this.speed.Y = speed.Y + generator.Next(-2, 5);
+        this.rotation.X = rotation.X + generator.Next((int)-(Math.PI), (int)(Math.PI));
+        this.rotation.Y = rotation.Y + generator.Next((int)-(Math.PI), (int)(Math.PI));
+        this.color = new Color(generator.Next(130, 255), generator.Next(0, 80), generator.Next(0, 40), 255);
     }
 
-    public Vector2 GetPosition()
+
+    public void DrawDestroyed()
     {
-        return position;
-    }
-
-    public float GetSize()
-    {
-        return radius;
-    }
-
-    public void DrawDestroyed(){
-        
+        Raylib.DrawCircleV(position, radius, color);
+        position += speed * rotation;
     }
 
 }

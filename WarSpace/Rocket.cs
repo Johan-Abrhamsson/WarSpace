@@ -3,17 +3,9 @@ using System.Numerics;
 using System;
 using Raylib_cs;
 using System.Collections.Generic;
-public class Rocket
+using System.IO;
+public class Rocket : Object
 {
-    Vector2 position;
-
-    Vector2 speed = new Vector2(0, 0);
-
-    Vector2 accileration = new Vector2(0.03f, 0.03f);
-
-    double angle;
-
-    Vector2 rotation = new Vector2((float)Math.Cos(0), (float)Math.Sin(0));
 
     string player;
 
@@ -21,11 +13,12 @@ public class Rocket
 
     int currentTicker;
 
-    Rectangle hitbox = new Rectangle();
+    bool isAlive = true;
 
-    Random generator = new Random();
+    List<Destroyed> deathShow = new List<Destroyed>();
+    string[] WindowSize = File.ReadAllLines(@"resolution.txt");
 
-    public Rocket(Vector2 positionNew, double angleNew, bool validMovementNew, string playerNew)
+    public Rocket(Vector2 positionNew, float angleNew, bool validMovementNew, string playerNew)
     {
         this.position = positionNew;
         this.angle = angleNew;
@@ -33,7 +26,8 @@ public class Rocket
         this.rotation.Y = (float)Math.Sin(angle);
         this.validMovement = validMovementNew;
         this.player = playerNew;
-        this.hitbox = new Rectangle(position.X, position.Y, 10, 10);
+        this.hitBox = new Rectangle(position.X, position.Y, 10, 10);
+        accileration = new Vector2(0.05f, 0.05f);
     }
 
     public void Movement()
@@ -44,59 +38,51 @@ public class Rocket
             {
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_UP))
                 {
-                    speed += accileration;
+                    AppledForce(new Force(accileration.X, rotation));
                 }
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_DOWN))
                 {
-                    speed -= accileration;
-                    if (speed.X <= 0 && speed.Y <= 0)
-                    {
-                        speed = new Vector2(0, 0);
-                    }
+                    AppledForce(new Force(-accileration.X, rotation));
                 }
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT))
                 {
-                    angle += (double)accileration.X;
+                    angle += accileration.X;
                 }
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT))
                 {
-                    angle -= (double)accileration.X;
+                    angle -= accileration.X;
                 }
             }
             else if (player == "player2")
             {
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_W))
                 {
-                    speed += accileration;
+                    AppledForce(new Force(accileration.X, rotation));
                 }
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_S))
                 {
-                    speed -= accileration;
-                    if (speed.X <= 0 && speed.Y <= 0)
-                    {
-                        speed = new Vector2(0, 0);
-                    }
+                    AppledForce(new Force(-accileration.X, rotation));
                 }
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
                 {
-                    angle += (double)accileration.X;
+                    angle += accileration.X;
                 }
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
                 {
-                    angle -= (double)accileration.X;
+                    angle -= accileration.X;
                 }
             }
         }
         rotation.X = (float)Math.Cos(angle);
         rotation.Y = (float)Math.Sin(angle);
-        position.X += speed.X * rotation.X;
-        position.Y += speed.Y * rotation.Y;
-        hitbox.x = position.X;
-        hitbox.y = position.Y;
+        position.X += speed.X;
+        position.Y += speed.Y;
+        hitBox.x = position.X;
+        hitBox.y = position.Y;
     }
 
     public bool ShotCheck(int ticker)
@@ -134,9 +120,23 @@ public class Rocket
 
     public void DrawRocket()
     {
-        Raylib.DrawLine((int)position.X, (int)position.Y, (int)(position.X + rotation.X * 20), (int)(position.Y + rotation.Y * 20), Color.RED);
-        Raylib.DrawLine((int)position.X, (int)position.Y - 5, (int)(position.X + speed.X * 5), (int)position.Y - 5, Color.GREEN);
-        Raylib.DrawRectangle((int)hitbox.x, (int)hitbox.y, (int)hitbox.width, (int)hitbox.height, Color.BLUE);
+        if (player == "player1")
+        {
+            Raylib.DrawRectangle((int)hitBox.x, (int)hitBox.y, (int)hitBox.width, (int)hitBox.height, Color.BLUE);
+            Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.ORANGE);
+        }
+        else if (player == "player2")
+        {
+            Raylib.DrawRectangle((int)hitBox.x, (int)hitBox.y, (int)hitBox.width, (int)hitBox.height, Color.RED);
+            Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.YELLOW);
+        }
+        else
+        {
+            Raylib.DrawRectangle((int)hitBox.x, (int)hitBox.y, (int)hitBox.width, (int)hitBox.height, Color.RED);
+            Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.YELLOW);
+        }
+        Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y - 5, (int)(position.X + speed.X * 5) + (int)hitBox.width / 2, (int)position.Y - 5, Color.GREEN);
+        Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y - 5, (int)position.X + (int)hitBox.width / 2, (int)(position.Y - 5 + speed.Y * 5), Color.PURPLE);
     }
 
 
@@ -152,6 +152,10 @@ public class Rocket
     {
         return rotation;
     }
+    public Rectangle GetRocketHitbox()
+    {
+        return hitBox;
+    }
     public Vector2 ChangeRocketPos(Vector2 Change)
     {
         this.position = Change;
@@ -163,12 +167,6 @@ public class Rocket
         return player;
     }
 
-    public Vector2 AppledForce(Force force)
-    {
-        speed += force.GetForce();
-        return speed;
-    }
-
     public int ChangeTicker(int time)
     {
         this.currentTicker = time;
@@ -177,42 +175,71 @@ public class Rocket
 
     public void CheckDeath(Rocket rocket, List<Shot> bullets, List<Asteroid> asteroids, List<BlackHole> blackHoles)
     {
-        if (rocket.position.X >= this.hitbox.x && rocket.position.X <= this.hitbox.x + this.hitbox.width || rocket.position.Y >= this.hitbox.y && rocket.position.Y <= this.hitbox.y - this.hitbox.height)
+        if (rocket.position.X >= this.hitBox.x && rocket.position.X <= this.hitBox.x + this.hitBox.width && rocket.position.Y >= this.hitBox.y && rocket.position.Y <= this.hitBox.y + this.hitBox.height)
         {
             Death();
         }
         for (var i = 0; i < bullets.Count; i++)
         {
-            if (bullets[i].GetPosition().X + bullets[i].GetSize() >= this.hitbox.x && bullets[i].GetPosition().X - bullets[i].GetSize() <= this.hitbox.x + this.hitbox.width || bullets[i].GetPosition().Y - bullets[i].GetSize() >= this.hitbox.y && bullets[i].GetPosition().Y + bullets[i].GetSize() <= this.hitbox.y - this.hitbox.height)
+            if (bullets[i].GetPosition().X + bullets[i].GetSize() >= this.hitBox.x && bullets[i].GetPosition().X - bullets[i].GetSize() <= this.hitBox.x + this.hitBox.width && bullets[i].GetPosition().Y + bullets[i].GetSize() >= this.hitBox.y && bullets[i].GetPosition().Y - bullets[i].GetSize() <= this.hitBox.y + this.hitBox.height)
             {
-                Death();
+                if (bullets[i].GetPolarity() != player)
+                {
+                    Death();
+                }
             }
         }
         for (var i = 0; i < asteroids.Count; i++)
         {
-            if (asteroids[i].GetPosition().X + asteroids[i].GetSize() >= this.hitbox.x && asteroids[i].GetPosition().X - asteroids[i].GetSize() <= this.hitbox.x + this.hitbox.width && asteroids[i].GetPosition().Y - asteroids[i].GetSize() >= this.hitbox.y && asteroids[i].GetPosition().Y + asteroids[i].GetSize() <= this.hitbox.y - this.hitbox.height)
+            if (asteroids[i].GetPosition().X + asteroids[i].GetSize() >= this.hitBox.x && asteroids[i].GetPosition().X - asteroids[i].GetSize() <= this.hitBox.x + this.hitBox.width && asteroids[i].GetPosition().Y + asteroids[i].GetSize() >= this.hitBox.y && asteroids[i].GetPosition().Y - asteroids[i].GetSize() <= this.hitBox.y + this.hitBox.height)
             {
                 Death();
             }
         }
-        for (var i = 0; i < blackHoles.Count; i++)
+        for (var i = 0; i < blackHoles.Count - 1; i++)
         {
-            if (blackHoles[i].GetPosition().X + blackHoles[i].GetSize() >= this.hitbox.x && blackHoles[i].GetPosition().X - blackHoles[i].GetSize() <= this.hitbox.x + this.hitbox.width && blackHoles[i].GetPosition().Y - blackHoles[i].GetSize() >= this.hitbox.y && bullets[i].GetPosition().Y + blackHoles[i].GetSize() <= this.hitbox.y - this.hitbox.height)
+            if (blackHoles[i].GetPosition().X + blackHoles[i].GetSize() >= this.hitBox.x && blackHoles[i].GetPosition().X - blackHoles[i].GetSize() <= this.hitBox.x + this.hitBox.width && blackHoles[i].GetPosition().Y + blackHoles[i].GetSize() >= this.hitBox.y && bullets[i].GetPosition().Y - blackHoles[i].GetSize() <= this.hitBox.y + this.hitBox.height)
             {
                 Death();
+                Console.WriteLine("it hit");
             }
+        }
+        if (this.hitBox.x + this.hitBox.width > int.Parse(WindowSize[0]) || this.hitBox.x < 0 || this.hitBox.y + this.hitBox.height > int.Parse(WindowSize[1]) || this.hitBox.y < 0)
+        {
+            Death();
         }
     }
 
     public void Death()
     {
         validMovement = false;
+        isAlive = false;
         int parts;
-        parts = generator.Next(3, 8);
+        parts = generator.Next(3, 20);
         for (int i = 0; i <= parts; i++)
         {
             Destroyed part = new Destroyed(position, speed, rotation);
+            deathShow.Add(part);
         }
-        Console.WriteLine("Death");
+        for (int i = 0; i <= generator.Next(10, 40); i++)
+        {
+            Raylib.DrawCircleV(position + new Vector2(hitBox.width / 2, hitBox.height / 2) + new Vector2(generator.Next(-20, 20), generator.Next(-20, 20)), generator.Next(1, 9), new Color(generator.Next(130, 255), generator.Next(0, 255), generator.Next(0, 90), generator.Next(1, 255)));
+        }
+    }
+
+    public List<Destroyed> DestroyedGroup()
+    {
+        return deathShow;
+    }
+
+    public bool GetDeath()
+    {
+        return isAlive;
+    }
+
+    public bool validMovementChange(bool change)
+    {
+        this.validMovement = change;
+        return validMovement;
     }
 }

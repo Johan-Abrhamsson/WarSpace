@@ -1,19 +1,26 @@
+using Raylib_cs;
+using System.Security.AccessControl;
 using System;
 using System.Numerics;
 
-public class BlackHole
+public class BlackHole : Object
 {
-    Vector2 position;
-
-    float radius = 3;
-
-    public Vector2 GetPosition()
+    Vector2 pullVector;
+    public BlackHole(Vector2 position, float mass)
     {
-        return position;
+        this.radius = mass;
+        this.position = position;
+        this.color = Color.PURPLE;
     }
 
-    public float GetSize()
+    public Vector2 Pull(Object value)
     {
-        return radius;
+        pullVector = this.position - value.GetPosition();
+        return value.AppledForce(new Force((radius / 1000000), pullVector));
+    }
+
+    public void DrawBlackHole()
+    {
+        Raylib.DrawCircleV(position, radius, color);
     }
 }

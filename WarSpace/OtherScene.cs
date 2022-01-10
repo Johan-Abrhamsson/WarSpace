@@ -45,14 +45,13 @@ public class OtherScene : Scene
                 switch (buttons[i].GetText())
                 {
                     case "Mutiplayer":
-                        Program.startingGame.group.AddScene("Battle", new Battle("player1", "player2"));
-                        Program.startingGame.group.CurrentScene = "Battle";
+                        Program.startingGame.group.AddScene(new Battle("player1", "player2"));
                         break;
                     case "Settings":
 
                         break;
                     case "Back":
-                        Program.startingGame.group.CurrentScene = "Start";
+                        Program.startingGame.group.AddScene(new Start());
                         break;
                 }
             }
