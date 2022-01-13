@@ -1,3 +1,4 @@
+using System.Threading;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -32,6 +33,7 @@ public class Battle : Scene
         rocket2.ChangeRocketPos(new Vector2((int.Parse(WindowSize[0])) * 0.9f, (int.Parse(WindowSize[1]) * 0.1f)));
         totalBlackHole.Add(waddup);
         waddup.ChangePosition(new Vector2((int.Parse(WindowSize[0])) / 2, (int.Parse(WindowSize[1])) / 2));
+        Settings.FirstRound = true;
     }
 
     public override void Draw()
@@ -89,64 +91,93 @@ public class Battle : Scene
     public override void Update()
     {
         base.Update();
-        rocket1.Movement();
-        rocket2.Movement();
-        waddup.Pull(rocket1);
-        waddup.Pull(rocket2);
-        for (var i = 0; i < totalAsteroid.Count; i++)
+        if (Settings.FirstRound == true)
         {
-            totalAsteroid[i].AstreroidRun();
-            for (var k = 0; k < totalBlackHole.Count; k++)
+            if (ticker >= (Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 7))
             {
-                totalBlackHole[k].Pull(totalAsteroid[i]);
-                if (!(totalShot.Count == 0))
-                {
-                    totalBlackHole[k].Pull(totalShot[i]);
-                }
+                Settings.FirstRound = false;
             }
-        }
-        if (ticker % (Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 8) == 0)
-        {
-            totalAsteroid.Add(new Asteroid());
-        }
-        if (rocket1.ShotCheck(ticker))
-        {
-            totalShot.Add(new Shot(rocket1.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket1.GetRocketSpeed() + rocket1.GetRocketSpeed(), rocket1.GetRocketRotaion(), "player1"));
-        }
-        if (rocket2.ShotCheck(ticker))
-        {
-            totalShot.Add(new Shot(rocket2.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket2.GetRocketSpeed() + rocket2.GetRocketSpeed(), rocket2.GetRocketRotaion(), "player2"));
-        }
-        for (int i = 0; i <= totalShot.Count - 1; i++)
-        {
-            totalShot[i].ShotRun();
-        }
-        rocket1.CheckDeath(rocket2, totalShot, totalAsteroid, totalBlackHole);
-        rocket2.CheckDeath(rocket1, totalShot, totalAsteroid, totalBlackHole);
+            else if (ticker >= Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 5)
+            {
 
-        if (winner == "not")
-        {
-            if (!rocket1.GetDeath() && !rocket2.GetDeath())
-            {
-                winner = "draw";
+                Raylib.DrawText("1", int.Parse(WindowSize[0]) / 2, int.Parse(WindowSize[1]) / 2, 100, Color.WHITE);
             }
-            else
+            else if (ticker >= Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 3)
             {
-                if (!rocket1.GetDeath())
-                {
-                    winner = "player2";
-                }
-                if (!rocket2.GetDeath())
-                {
-                    winner = "player1";
-                }
+
+                Raylib.DrawText("2", int.Parse(WindowSize[0]) / 2, int.Parse(WindowSize[1]) / 2, 100, Color.WHITE);
             }
+            else if (ticker >= Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()))
+            {
+
+                Raylib.DrawText("3", int.Parse(WindowSize[0]) / 2, int.Parse(WindowSize[1]) / 2, 100, Color.WHITE);
+            }
+            ticker++;
         }
-        if (winner != "not")
+        if (Settings.FirstRound == false)
         {
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_ENTER))
+            rocket1.Movement();
+            rocket2.Movement();
+            waddup.Pull(rocket1);
+            waddup.Pull(rocket2);
+            for (var i = 0; i < totalAsteroid.Count; i++)
             {
-                Program.startingGame.group.AddScene(new Battle("player1", "player2"));
+                totalAsteroid[i].AstreroidRun();
+                for (var k = 0; k < totalBlackHole.Count; k++)
+                {
+                    totalBlackHole[k].Pull(totalAsteroid[i]);
+                    if (!(totalShot.Count == 0))
+                    {
+                        totalBlackHole[k].Pull(totalShot[i]);
+                    }
+                }
+            }
+            if (Settings.Asteroids == true)
+            {
+                if (ticker % (Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 8) == 0)
+                {
+                    totalAsteroid.Add(new Asteroid());
+                }
+            }
+            if (rocket1.ShotCheck(ticker))
+            {
+                totalShot.Add(new Shot(rocket1.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket1.GetRocketSpeed() + rocket1.GetRocketSpeed(), rocket1.GetRocketRotaion(), "player1"));
+            }
+            if (rocket2.ShotCheck(ticker))
+            {
+                totalShot.Add(new Shot(rocket2.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket2.GetRocketSpeed() + rocket2.GetRocketSpeed(), rocket2.GetRocketRotaion(), "player2"));
+            }
+            for (int i = 0; i <= totalShot.Count - 1; i++)
+            {
+                totalShot[i].ShotRun();
+            }
+            rocket1.CheckDeath(rocket2, totalShot, totalAsteroid, totalBlackHole);
+            rocket2.CheckDeath(rocket1, totalShot, totalAsteroid, totalBlackHole);
+
+            if (winner == "not")
+            {
+                if (!rocket1.GetDeath() && !rocket2.GetDeath())
+                {
+                    winner = "draw";
+                }
+                else
+                {
+                    if (!rocket1.GetDeath())
+                    {
+                        winner = "player2";
+                    }
+                    if (!rocket2.GetDeath())
+                    {
+                        winner = "player1";
+                    }
+                }
+            }
+            if (winner != "not")
+            {
+                if (Raylib.IsKeyDown(KeyboardKey.KEY_ENTER))
+                {
+                    Program.startingGame.group.AddScene(new Battle("player1", "player2"));
+                }
             }
         }
     }

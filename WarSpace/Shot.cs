@@ -22,6 +22,7 @@ public class Shot : Object
         {
             color = Color.YELLOW;
         }
+        position = position * rotation;
     }
 
     public void DrawShot()

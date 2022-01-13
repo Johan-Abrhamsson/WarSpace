@@ -43,7 +43,7 @@ public class Rocket : Object
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_DOWN))
                 {
-                    AppledForce(new Force(-accileration.X, rotation));
+                    AppledForce(new Force(-accileration.X / 3, rotation));
                 }
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT))
                 {
@@ -64,7 +64,7 @@ public class Rocket : Object
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_S))
                 {
-                    AppledForce(new Force(-accileration.X, rotation));
+                    AppledForce(new Force(-accileration.X / 3, rotation));
                 }
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
                 {

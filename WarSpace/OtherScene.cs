@@ -47,8 +47,8 @@ public class OtherScene : Scene
                     case "Mutiplayer":
                         Program.startingGame.group.AddScene(new Battle("player1", "player2"));
                         break;
-                    case "Settings":
-
+                    case "Asteroid":
+                        Settings.Asteroids = !Settings.Asteroids;
                         break;
                     case "Back":
                         Program.startingGame.group.AddScene(new Start());
