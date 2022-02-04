@@ -40,7 +40,7 @@ public class OtherScene : Scene
         for (int i = 0; i < buttons.Count; i++)
         {
             buttons[i].ClickBoxColorHover(mousePos.X, mousePos.Y);
-            if (buttons[i].Check(mousePos.X, mousePos.Y) == true)
+            if (buttons[i].Check(mousePos.X, mousePos.Y))
             {
                 switch (buttons[i].GetText())
                 {
@@ -49,6 +49,7 @@ public class OtherScene : Scene
                         break;
                     case "Asteroid":
                         Settings.Asteroids = !Settings.Asteroids;
+                        Console.WriteLine(Settings.Asteroids);
                         break;
                     case "Back":
                         Program.startingGame.group.AddScene(new Start());

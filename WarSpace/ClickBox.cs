@@ -11,6 +11,8 @@ public class ClickBox
 
     private bool isClicked = false;
 
+    private bool stillClicked = false;
+
     private string text;
 
     private Color variant;
@@ -41,15 +43,25 @@ public class ClickBox
     {
         if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_LEFT_BUTTON))
         {
+            if (Raylib.IsMouseButtonUp(MouseButton.MOUSE_LEFT_BUTTON))
+            {
+                this.stillClicked = true;
+            }
             if (position.X <= mouseX && position.X + Size.X >= mouseX && position.Y <= mouseY && position.Y + Size.Y >= mouseY)
             {
-                isClicked = true;
+                if (!this.stillClicked)
+                {
+                    isClicked = true;
+                    this.stillClicked = true;
+                }
             }
             else
             {
+                this.stillClicked = false;
                 isClicked = false;
             }
         }
+        //Console.WriteLine($"sC :: {stillClicked}");
         return isClicked;
     }
 

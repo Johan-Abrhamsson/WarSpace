@@ -15,7 +15,7 @@ public class Battle : Scene
 
     Rocket rocket2 = new Rocket(new Vector2(0, 0), (float)((5 * Math.PI) / 6), true, "-");
 
-    BlackHole waddup = new BlackHole(new Vector2(600, 600), 20);
+    BlackHole blackHole = new BlackHole(new Vector2(600, 600), 20);
 
     string player1;
 
@@ -25,14 +25,16 @@ public class Battle : Scene
 
     public Battle(string player1Value, string player2Value)
     {
+        //Gör så att spelet vet om spelaren är en bot eller inte
         this.player1 = player1Value;
         this.player2 = player2Value;
+        //Fixar alla postioner
         rocket1.ChangePlayer(player1);
         rocket1.ChangeRocketPos(new Vector2((int.Parse(WindowSize[0])) * 0.1f, (int.Parse(WindowSize[1]) * 0.9f)));
         rocket2.ChangePlayer(player2);
         rocket2.ChangeRocketPos(new Vector2((int.Parse(WindowSize[0])) * 0.9f, (int.Parse(WindowSize[1]) * 0.1f)));
-        totalBlackHole.Add(waddup);
-        waddup.ChangePosition(new Vector2((int.Parse(WindowSize[0])) / 2, (int.Parse(WindowSize[1])) / 2));
+        totalBlackHole.Add(blackHole);
+        blackHole.ChangePosition(new Vector2((int.Parse(WindowSize[0])) / 2, (int.Parse(WindowSize[1])) / 2));
         Settings.FirstRound = true;
     }
 
@@ -41,7 +43,7 @@ public class Battle : Scene
         base.Draw();
         rocket1.DrawRocket();
         rocket2.DrawRocket();
-        waddup.DrawBlackHole();
+        blackHole.DrawBlackHole();
         for (int i = 0; i <= totalAsteroid.Count - 1; i++)
         {
             totalAsteroid[i].DrawAsteroid();
@@ -118,18 +120,19 @@ public class Battle : Scene
         {
             rocket1.Movement();
             rocket2.Movement();
-            waddup.Pull(rocket1);
-            waddup.Pull(rocket2);
+            blackHole.Pull(rocket1);
+            blackHole.Pull(rocket2);
             for (var i = 0; i < totalAsteroid.Count; i++)
             {
                 totalAsteroid[i].AstreroidRun();
                 for (var k = 0; k < totalBlackHole.Count; k++)
                 {
                     totalBlackHole[k].Pull(totalAsteroid[i]);
-                    if (!(totalShot.Count == 0))
-                    {
-                        totalBlackHole[k].Pull(totalShot[i]);
-                    }
+                    // Koden blev problematisk och var inte viktig
+                    // if (!(totalShot.Count == 0))
+                    // {
+                    //     totalBlackHole[k].Pull(totalShot[i]);
+                    // }
                 }
             }
             if (Settings.Asteroids == true)
@@ -141,11 +144,11 @@ public class Battle : Scene
             }
             if (rocket1.ShotCheck(ticker))
             {
-                totalShot.Add(new Shot(rocket1.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket1.GetRocketSpeed() + rocket1.GetRocketSpeed(), rocket1.GetRocketRotaion(), "player1"));
+                totalShot.Add(new Shot("Rocket1_" + Timer.ActiveCount, rocket1.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket1.GetRocketSpeed(), rocket1.GetRocketRotaion(), "player1"));
             }
             if (rocket2.ShotCheck(ticker))
             {
-                totalShot.Add(new Shot(rocket2.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket2.GetRocketSpeed() + rocket2.GetRocketSpeed(), rocket2.GetRocketRotaion(), "player2"));
+                totalShot.Add(new Shot("Rocket2_" + Timer.ActiveCount, rocket2.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket2.GetRocketSpeed(), rocket2.GetRocketRotaion(), "player2"));
             }
             for (int i = 0; i <= totalShot.Count - 1; i++)
             {
@@ -177,6 +180,10 @@ public class Battle : Scene
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_ENTER))
                 {
                     Program.startingGame.group.AddScene(new Battle("player1", "player2"));
+                }
+                if (Raylib.IsKeyDown(KeyboardKey.KEY_BACKSPACE))
+                {
+                    Program.startingGame.group.AddScene(new Start());
                 }
             }
         }

@@ -1,6 +1,7 @@
 using Raylib_cs;
 using System;
 using System.Numerics;
+using System.IO;
 
 public class Object
 {
@@ -19,6 +20,8 @@ public class Object
     protected Color color;
 
     protected Rectangle hitBox;
+
+    protected string[] WindowSize = File.ReadAllLines(@"resolution.txt");
 
     public Vector2 GetPosition()
     {
@@ -49,7 +52,7 @@ public class Object
     public Vector2 AppledForce(Force force)
     {
         speed += force.GetForce();
-        rotation += force.GetForce();
+        //rotation += force.GetForce();
         return speed;
     }
 

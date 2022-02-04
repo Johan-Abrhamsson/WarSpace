@@ -5,10 +5,10 @@ public class Asteroid : Object
 {
     public Asteroid()
     {
-        this.position = new Vector2(generator.Next(-100, 1400), generator.Next(-100, 1100));
-        while (position.X >= -10 && position.X <= 1300 && position.Y >= -10 && position.Y <= 1000)
+        this.position = new Vector2(generator.Next(-100, (int.Parse(WindowSize[0])) + 100), generator.Next(-100, (int.Parse(WindowSize[1]) + 100)));
+        while (position.X >= -10 && position.X <= (int.Parse(WindowSize[0])) + 10 && position.Y >= -10 && position.Y <= (int.Parse(WindowSize[1])) + 10)
         {
-            this.position = new Vector2(generator.Next(-100, 1400), generator.Next(-100, 1100));
+            this.position = new Vector2(generator.Next(-100, (int.Parse(WindowSize[0])) + 100), generator.Next(-100, (int.Parse(WindowSize[1]) + 100)));
         }
         this.radius = generator.Next(10, 20);
         this.color = Color.RED;
