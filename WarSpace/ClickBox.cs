@@ -9,10 +9,6 @@ public class ClickBox
     private Vector2 position;
     private Vector2 Size;
 
-    private bool isClicked = false;
-
-    private bool stillClicked = false;
-
     private string text;
 
     private Color variant;
@@ -41,28 +37,15 @@ public class ClickBox
     }
     public bool Check(float mouseX, float mouseY)
     {
-        if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_LEFT_BUTTON))
-        {
-            if (Raylib.IsMouseButtonUp(MouseButton.MOUSE_LEFT_BUTTON))
-            {
-                this.stillClicked = true;
-            }
-            if (position.X <= mouseX && position.X + Size.X >= mouseX && position.Y <= mouseY && position.Y + Size.Y >= mouseY)
-            {
-                if (!this.stillClicked)
-                {
-                    isClicked = true;
-                    this.stillClicked = true;
-                }
-            }
-            else
-            {
-                this.stillClicked = false;
-                isClicked = false;
-            }
-        }
-        //Console.WriteLine($"sC :: {stillClicked}");
-        return isClicked;
+        // If the courser is outside the bounding box using AABB collision detection, return false
+        if ( (mouseX < position.X) || (mouseX > position.X + Size.X) || (mouseY < position.Y) || (mouseY > position.Y + Size.Y) )
+            return false;
+        
+        // If the courser is inside the bounding box and is pressed, return true
+        if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_LEFT_BUTTON)) 
+            return true;
+
+        return false;
     }
 
     public void DrawClickBox(bool withText)
@@ -73,11 +56,11 @@ public class ClickBox
             Raylib.DrawLine((int)position.X, (int)position.Y, (int)position.X, (int)position.Y + (int)Size.Y, variant);
             Raylib.DrawLine((int)position.X, (int)position.Y + (int)Size.Y, (int)position.X + (int)Size.X, (int)position.Y + (int)Size.Y, variant);
             Raylib.DrawLine((int)position.X + (int)Size.X, (int)position.Y, (int)position.X + (int)Size.X, (int)position.Y + (int)Size.Y, variant);
+            
             if (withText == true)
             {
                 Raylib.DrawText(text, (int)position.X + 1, ((int)position.Y + (int)Size.Y / 3), (int)Size.X / 7, variant);
             }
-            else { }
         }
         else
         {
@@ -85,12 +68,12 @@ public class ClickBox
             Raylib.DrawLine((int)position.X, (int)position.Y, (int)position.X, (int)position.Y + (int)Size.Y, hover);
             Raylib.DrawLine((int)position.X, (int)position.Y + (int)Size.Y, (int)position.X + (int)Size.X, (int)position.Y + (int)Size.Y, hover);
             Raylib.DrawLine((int)position.X + (int)Size.X, (int)position.Y, (int)position.X + (int)Size.X, (int)position.Y + (int)Size.Y, hover);
+            
             if (withText == true)
             {
                 Raylib.DrawText(text, (int)position.X + 3, ((int)position.Y + (int)Size.Y / 3), (int)Size.X / 6, Color.DARKGRAY);
                 Raylib.DrawText(text, (int)position.X + 1, ((int)position.Y + (int)Size.Y / 3), (int)Size.X / 6, hover);
             }
-            else { }
         }
     }
 
