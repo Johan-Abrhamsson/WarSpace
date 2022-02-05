@@ -16,7 +16,7 @@ public class Start : Scene
 
     ClickBox settings = new ClickBox("Settings", 0, 0, 0, 0, Color.WHITE, Color.YELLOW);
 
-    ClickBox colour = new ClickBox("Advanced", 0, 0, 0, 0, Color.WHITE, Color.BLUE);
+    ClickBox controls = new ClickBox("Controls", 0, 0, 0, 0, Color.WHITE, Color.BLUE);
 
     ClickBox multiplayer = new ClickBox("Mutiplayer", 0, 0, 0, 0, Color.WHITE, Color.GREEN);
 
@@ -43,9 +43,9 @@ public class Start : Scene
         settings.ChangeClickBoxPos(new Vector2(3.5f * int.Parse(WindowSize[0]) / 8, 3 * int.Parse(WindowSize[1]) / 4));
         settings.ChangeClickBoxSize(new Vector2(int.Parse(WindowSize[0]) / 9, int.Parse(WindowSize[1]) / 9));
 
-        //Colour button
-        colour.ChangeClickBoxPos(new Vector2(6 * int.Parse(WindowSize[0]) / 8, 3 * int.Parse(WindowSize[1]) / 4));
-        colour.ChangeClickBoxSize(new Vector2(int.Parse(WindowSize[0]) / 9, int.Parse(WindowSize[1]) / 9));
+        //Controls button
+        controls.ChangeClickBoxPos(new Vector2(6 * int.Parse(WindowSize[0]) / 8, 3 * int.Parse(WindowSize[1]) / 4));
+        controls.ChangeClickBoxSize(new Vector2(int.Parse(WindowSize[0]) / 9, int.Parse(WindowSize[1]) / 9));
 
         //Multiplayer button
         multiplayer.ChangeClickBoxPos(new Vector2(int.Parse(WindowSize[0]) / 8, 3 * int.Parse(WindowSize[1]) / 4));
@@ -83,7 +83,7 @@ public class Start : Scene
 
             startGame.DrawClickBox(true);
             settings.DrawClickBox(true);
-            colour.DrawClickBox(true);
+            controls.DrawClickBox(true);
         }
     }
 
@@ -98,7 +98,7 @@ public class Start : Scene
             {
                 buttons.Add(startGame);
                 buttons.Add(settings);
-                buttons.Add(colour);
+                buttons.Add(controls);
                 keyhole = true;
             }
         }
@@ -117,14 +117,13 @@ public class Start : Scene
                 switch (buttons[i].GetText())
                 {
                     case "Start Game":
-                        Program.startingGame.group.AddScene(new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }));
+                        Program.startingGame.group.AddScene(new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }, "Only multiplayer works right now, sorry"));
                         break;
                     case "Settings":
-                        Program.startingGame.group.AddScene(new OtherScene(new List<ClickBox>() { resolution, asteroids, back }));
+                        Program.startingGame.group.AddScene(new OtherScene(new List<ClickBox>() { resolution, asteroids, back }, $"Settings, toggle asteroids: [{Settings.Asteroids}] | toggle resolution: [{Settings.Resolution.X}] / [{Settings.Resolution.Y}] |  Go back to start to see updates"));
                         break;
-                    case "Advanced":
-                        //Program.startingGame.group.AddScene("AdvancedMenu", new OtherScene(new List<ClickBox>() { multiplayer, botFight, back }));
-                        //Program.startingGame.group.CurrentScene = "AdvancedMenu";
+                    case "Controls":
+                        Program.startingGame.group.AddScene(new OtherScene(new List<ClickBox>() { back }, "Player1 Movement: Arrows, Shoot: '.' | Player2 Movement: 'WASD', Shoot: 'G'"));
                         break;
                 }
             }

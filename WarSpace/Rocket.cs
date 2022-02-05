@@ -16,7 +16,6 @@ public class Rocket : Object
     bool isAlive = true;
 
     List<Destroyed> deathShow = new List<Destroyed>();
-    string[] WindowSize = File.ReadAllLines(@"resolution.txt");
 
     public Rocket(Vector2 positionNew, float angleNew, bool validMovementNew, string playerNew)
     {
