@@ -7,7 +7,6 @@ public class Shot : Object
 {
 
     string playerPolarity = "";
-    string debugName = "Bullet";
     float newSpeed;
 
     public Shot(string debugName, Vector2 position, Vector2 speed, Vector2 rotation, string playerPolarity)
@@ -54,6 +53,11 @@ public class Shot : Object
 
         // Add the constant speed of 3 to the variable
         tempSpeed += 5;
+
+        //if lazer is on
+        if (Settings.Lazer)
+            tempSpeed += 5;
+
 
         // Return the speed
         return tempSpeed;

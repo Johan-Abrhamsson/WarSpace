@@ -46,12 +46,12 @@ public class Rocket : Object
                 }
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT))
                 {
-                    angle += accileration.X;
+                    angle -= accileration.X;
                 }
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT))
                 {
-                    angle -= accileration.X;
+                    angle += accileration.X;
                 }
             }
             else if (player == "player2")
@@ -67,12 +67,12 @@ public class Rocket : Object
                 }
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
                 {
-                    angle += accileration.X;
+                    angle -= accileration.X;
                 }
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
                 {
-                    angle -= accileration.X;
+                    angle += accileration.X;
                 }
             }
         }
@@ -88,7 +88,29 @@ public class Rocket : Object
     {
         if (validMovement)
         {
-            if (currentTicker <= ticker - Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) / 2)
+            if (!Settings.Lazer)
+            {
+                if (currentTicker <= ticker - Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) / 2)
+                {
+                    if (player == "player1")
+                    {
+                        if (Raylib.IsKeyDown(KeyboardKey.KEY_PERIOD))
+                        {
+                            currentTicker = ticker;
+                            return true;
+                        }
+                    }
+                    else if (player == "player2")
+                    {
+                        if (Raylib.IsKeyDown(KeyboardKey.KEY_G))
+                        {
+                            currentTicker = ticker;
+                            return true;
+                        }
+                    }
+                }
+            }
+            else
             {
                 if (player == "player1")
                 {
@@ -200,7 +222,6 @@ public class Rocket : Object
             if (blackHoles[i].GetPosition().X + blackHoles[i].GetSize() >= this.hitBox.x && blackHoles[i].GetPosition().X - blackHoles[i].GetSize() <= this.hitBox.x + this.hitBox.width && blackHoles[i].GetPosition().Y + blackHoles[i].GetSize() >= this.hitBox.y && bullets[i].GetPosition().Y - blackHoles[i].GetSize() <= this.hitBox.y + this.hitBox.height)
             {
                 Death();
-                Console.WriteLine("it hit");
             }
         }
         if (this.hitBox.x + this.hitBox.width > int.Parse(WindowSize[0]) || this.hitBox.x < 0 || this.hitBox.y + this.hitBox.height > int.Parse(WindowSize[1]) || this.hitBox.y < 0)

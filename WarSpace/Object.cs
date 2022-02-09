@@ -3,7 +3,7 @@ using System;
 using System.Numerics;
 using System.IO;
 
-public class Object
+abstract public class Object
 {
     protected Vector2 accileration;
     protected Random generator = new Random();

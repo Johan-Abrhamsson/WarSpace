@@ -8,14 +8,16 @@ public class Text
 {
     string text;
     Vector2 postion;
-    public Text(string text, Vector2 position)
+    float size;
+    public Text(string text, Vector2 position, float size)
     {
         this.text = text;
         this.postion = position;
+        this.size = size;
     }
 
     public void DrawText()
     {
-        Raylib.DrawText(text, (int)postion.X, (int)postion.Y, (int)Settings.Resolution.X / 40, Color.WHITE);
+        Raylib.DrawText(text, (int)postion.X, (int)postion.Y, (int)(Settings.Resolution.X / 40 * size), Color.WHITE);
     }
 }

@@ -28,6 +28,7 @@ public class OtherScene : Scene
         distance = (int.Parse(WindowSize[1]) / 2) / buttons.Count;
         for (int i = 0; i <= buttons.Count - 1; i++)
         {
+            buttons[i].ChangeClickBoxSize(new Vector2(int.Parse(WindowSize[0]) / 9, int.Parse(WindowSize[1]) / 9));
             buttons[i].ChangeClickBoxPos(new Vector2((int.Parse(WindowSize[0])) / 7, ((int.Parse(WindowSize[0])) / 5) + (i * distance)));
         }
         row = (int.Parse(WindowSize[1])) / 300;
@@ -55,15 +56,12 @@ public class OtherScene : Scene
                         break;
                     }
                 }
-                Console.WriteLine(command);
-                textList.Add(new Text(command, new Vector2(((int.Parse(WindowSize[0])) / 3f) + (int)distance / 8 * collum, (int)distance / 8 * row)));
+                textList.Add(new Text(command, new Vector2(((int.Parse(WindowSize[0])) / 3f) + 15 * collum, 20 * row), 1));
             }
             else
             {
-                textList.Add(new Text(C, new Vector2(((int.Parse(WindowSize[0])) / 3f) + (int)distance / 8 * collum, (int)distance / 8 * row)));
+                textList.Add(new Text(C, new Vector2(((int.Parse(WindowSize[0])) / 3f) + 15 * collum, 20 * row), 1));
             }
-            Console.WriteLine(row);
-            Console.WriteLine(collum);
             collum += (int.Parse(WindowSize[0])) / 100;
         }
     }
@@ -97,17 +95,25 @@ public class OtherScene : Scene
             {
                 switch (buttons[i].GetText())
                 {
-                    case "Mutiplayer":
+                    case "Multiplayer":
                         Program.startingGame.group.AddScene(new Battle("player1", "player2"));
                         break;
                     case "Asteroid":
                         Settings.Asteroids = !Settings.Asteroids;
                         break;
                     case "Resolution":
-                        Settings.Resolution = new Vector2(640, 480);
+                        if (Settings.Resolution != new Vector2(640, 480))
+                            Settings.Resolution = new Vector2(640, 480);
+
+                        else
+                            Settings.Resolution = new Vector2(1200, 900);
+
                         break;
                     case "Back":
                         Program.startingGame.group.AddScene(new Start());
+                        break;
+                    case "Lazer":
+                        Settings.Lazer = !Settings.Lazer;
                         break;
                 }
             }

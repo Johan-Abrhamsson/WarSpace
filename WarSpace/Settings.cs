@@ -13,6 +13,8 @@ static public class Settings
 
     static string[] WindowSize = File.ReadAllLines(@"resolution.txt");
 
+    static public bool Lazer { get; set; }
+
     static Settings()
     {
         Resolution = new Vector2((int.Parse(WindowSize[0])), (int.Parse(WindowSize[1])));
@@ -20,5 +22,6 @@ static public class Settings
         File.WriteAllLines(@"resolution.txt", windowSize);
         FirstRound = false;
         Asteroids = true;
+        Lazer = false;
     }
 }

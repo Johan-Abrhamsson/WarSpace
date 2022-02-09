@@ -54,10 +54,12 @@ public class Battle : Scene
         }
         if (winner != "not")
         {
-            Raylib.DrawText("Game over", 120, 120, 50, Color.WHITE);
+            Text gameOver = new Text("Game over", new Vector2(Settings.Resolution.X / 2 - Settings.Resolution.X / 6, Settings.Resolution.Y / 3), 3f);
+            gameOver.DrawText();
             if (winner == "draw")
             {
-                Raylib.DrawText("Draw", 120, 240, 50, Color.WHITE);
+                Text Draw = new Text("Draw", new Vector2(Settings.Resolution.X / 2 - Settings.Resolution.X / 6, Settings.Resolution.Y / 2 + Settings.Resolution.Y / 6), 2.5f);
+                Draw.DrawText();
                 for (int i = 0; i <= rocket1.DestroyedGroup().Count - 1; i++)
                 {
                     rocket1.DestroyedGroup()[i].DrawDestroyed();
@@ -70,7 +72,8 @@ public class Battle : Scene
 
             if (winner == "player2")
             {
-                Raylib.DrawText("Player 2 (wads) wins", 120, 240, 50, Color.WHITE);
+                Text player2 = new Text("Player 2 wins", new Vector2(Settings.Resolution.X / 2 - Settings.Resolution.X / 6, Settings.Resolution.Y / 2 + Settings.Resolution.Y / 6), 2.5f);
+                player2.DrawText();
                 rocket2.validMovementChange(false);
                 for (int i = 0; i <= rocket1.DestroyedGroup().Count - 1; i++)
                 {
@@ -80,7 +83,8 @@ public class Battle : Scene
             }
             if (winner == "player1")
             {
-                Raylib.DrawText("Player 1 (^v<>) wins", 120, 240, 50, Color.WHITE);
+                Text player1 = new Text("Player 1 wins", new Vector2(Settings.Resolution.X / 2 - Settings.Resolution.X / 6, Settings.Resolution.Y / 2 + Settings.Resolution.Y / 6), 2.5f);
+                player1.DrawText();
                 rocket1.validMovementChange(false);
                 for (int i = 0; i <= rocket2.DestroyedGroup().Count - 1; i++)
                 {
@@ -88,6 +92,10 @@ public class Battle : Scene
                 }
 
             }
+            Text controlls = new Text("Press enter to rematch", new Vector2(Settings.Resolution.X / 2f - Settings.Resolution.X / 5, Settings.Resolution.Y / 2 + Settings.Resolution.Y / 4), 1.5f);
+            Text controlls2 = new Text("Press backspace to go back to start", new Vector2(Settings.Resolution.X / 3 - Settings.Resolution.X / 6, Settings.Resolution.Y / 2 + Settings.Resolution.Y / 3), 1.5f);
+            controlls.DrawText();
+            controlls2.DrawText();
         }
     }
     public override void Update()
@@ -95,26 +103,7 @@ public class Battle : Scene
         base.Update();
         if (Settings.FirstRound == true)
         {
-            if (ticker >= (Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 7))
-            {
-                Settings.FirstRound = false;
-            }
-            else if (ticker >= Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 5)
-            {
-
-                Raylib.DrawText("1", int.Parse(WindowSize[0]) / 2, int.Parse(WindowSize[1]) / 2, 100, Color.WHITE);
-            }
-            else if (ticker >= Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 3)
-            {
-
-                Raylib.DrawText("2", int.Parse(WindowSize[0]) / 2, int.Parse(WindowSize[1]) / 2, 100, Color.WHITE);
-            }
-            else if (ticker >= Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()))
-            {
-
-                Raylib.DrawText("3", int.Parse(WindowSize[0]) / 2, int.Parse(WindowSize[1]) / 2, 100, Color.WHITE);
-            }
-            ticker++;
+            begin();
         }
         if (Settings.FirstRound == false)
         {
@@ -156,23 +145,32 @@ public class Battle : Scene
             }
             rocket1.CheckDeath(rocket2, totalShot, totalAsteroid, totalBlackHole);
             rocket2.CheckDeath(rocket1, totalShot, totalAsteroid, totalBlackHole);
-
             if (winner == "not")
             {
-                if (!rocket1.GetDeath() && !rocket2.GetDeath())
+                switch (rocket1.GetDeath())
                 {
-                    winner = "draw";
-                }
-                else
-                {
-                    if (!rocket1.GetDeath())
-                    {
-                        winner = "player2";
-                    }
-                    if (!rocket2.GetDeath())
-                    {
-                        winner = "player1";
-                    }
+                    case true:
+                        switch (rocket2.GetDeath())
+                        {
+                            case true:
+                                winner = "not";
+                                break;
+                            case false:
+                                winner = "player2";
+                                break;
+                        }
+                        break;
+                    case false:
+                        switch (rocket2.GetDeath())
+                        {
+                            case true:
+                                winner = "player1";
+                                break;
+                            case false:
+                                winner = "draw";
+                                break;
+                        }
+                        break;
                 }
             }
             if (winner != "not")
@@ -187,5 +185,28 @@ public class Battle : Scene
                 }
             }
         }
+    }
+    public void begin()
+    {
+        if (ticker >= (Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 7))
+        {
+            Settings.FirstRound = false;
+        }
+        else if (ticker >= Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 5)
+        {
+
+            Raylib.DrawText("1", int.Parse(WindowSize[0]) / 2, int.Parse(WindowSize[1]) / 2, 100, Color.WHITE);
+        }
+        else if (ticker >= Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 3)
+        {
+
+            Raylib.DrawText("2", int.Parse(WindowSize[0]) / 2, int.Parse(WindowSize[1]) / 2, 100, Color.WHITE);
+        }
+        else if (ticker >= Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()))
+        {
+
+            Raylib.DrawText("3", int.Parse(WindowSize[0]) / 2, int.Parse(WindowSize[1]) / 2, 100, Color.WHITE);
+        }
+        ticker++;
     }
 }
