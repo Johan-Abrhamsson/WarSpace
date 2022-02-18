@@ -22,6 +22,7 @@ public class Scene
 
     }
 
+    //For all scenes for what should be exicuted.
     virtual public void Update()
     {
         ticker++;

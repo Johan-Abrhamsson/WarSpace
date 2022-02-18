@@ -9,9 +9,8 @@ public class Shot : Object
     string playerPolarity = "";
     float newSpeed;
 
-    public Shot(string debugName, Vector2 position, Vector2 speed, Vector2 rotation, string playerPolarity)
+    public Shot(Vector2 position, Vector2 speed, Vector2 rotation, string playerPolarity)
     {
-        //position += AppledForce(new Force(speed.X, rotation));
         radius = 5;
         this.position = position;
         this.speed = speed;

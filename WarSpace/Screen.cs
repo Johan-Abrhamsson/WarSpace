@@ -19,6 +19,7 @@ public class Screen
         Raylib.SetTargetFPS(Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()));
     }
 
+    //What should be rendered
     public void Run(SceneCollector playersScene)
     {
         while (Raylib.WindowShouldClose() == false)

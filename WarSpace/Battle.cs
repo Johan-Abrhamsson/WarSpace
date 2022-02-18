@@ -44,21 +44,25 @@ public class Battle : Scene
         rocket1.DrawRocket();
         rocket2.DrawRocket();
         blackHole.DrawBlackHole();
+        //For all asteroids
         for (int i = 0; i <= totalAsteroid.Count - 1; i++)
         {
             totalAsteroid[i].DrawAsteroid();
         }
+        //For all shoots
         for (int i = 0; i <= totalShot.Count - 1; i++)
         {
             totalShot[i].DrawShot();
         }
+
+        //Draw if anyone wins
         if (winner != "not")
         {
             Text gameOver = new Text("Game over", new Vector2(Settings.Resolution.X / 2 - Settings.Resolution.X / 6, Settings.Resolution.Y / 3), 3f);
             gameOver.DrawText();
             if (winner == "draw")
             {
-                Text Draw = new Text("Draw", new Vector2(Settings.Resolution.X / 2 - Settings.Resolution.X / 6, Settings.Resolution.Y / 2 + Settings.Resolution.Y / 6), 2.5f);
+                Text Draw = new Text("Draw", new Vector2(Settings.Resolution.X / 2 - Settings.Resolution.X / 8, Settings.Resolution.Y / 2 + Settings.Resolution.Y / 6), 2.5f);
                 Draw.DrawText();
                 for (int i = 0; i <= rocket1.DestroyedGroup().Count - 1; i++)
                 {
@@ -103,12 +107,15 @@ public class Battle : Scene
         base.Update();
         if (Settings.FirstRound == true)
         {
+            //for the starting countdown
             begin();
         }
         if (Settings.FirstRound == false)
         {
+            //Allow movement
             rocket1.Movement();
             rocket2.Movement();
+            //Pulling towards a blackhole
             blackHole.Pull(rocket1);
             blackHole.Pull(rocket2);
             for (var i = 0; i < totalAsteroid.Count; i++)
@@ -124,6 +131,7 @@ public class Battle : Scene
                     // }
                 }
             }
+            //if Asteroids should spawn
             if (Settings.Asteroids == true)
             {
                 if (ticker % (Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor()) * 8) == 0)
@@ -131,20 +139,26 @@ public class Battle : Scene
                     totalAsteroid.Add(new Asteroid());
                 }
             }
+            //when you can shoot
             if (rocket1.ShotCheck(ticker))
             {
-                totalShot.Add(new Shot("Rocket1_" + Timer.ActiveCount, rocket1.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket1.GetRocketSpeed(), rocket1.GetRocketRotaion(), "player1"));
+                totalShot.Add(new Shot(rocket1.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket1.GetRocketSpeed(), rocket1.GetRocketRotaion(), "player1"));
             }
             if (rocket2.ShotCheck(ticker))
             {
-                totalShot.Add(new Shot("Rocket2_" + Timer.ActiveCount, rocket2.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket2.GetRocketSpeed(), rocket2.GetRocketRotaion(), "player2"));
+                totalShot.Add(new Shot(rocket2.GetRocketPos() + new Vector2(rocket1.GetRocketHitbox().width / 2, rocket1.GetRocketHitbox().height / 2), rocket2.GetRocketSpeed(), rocket2.GetRocketRotaion(), "player2"));
             }
             for (int i = 0; i <= totalShot.Count - 1; i++)
             {
                 totalShot[i].ShotRun();
             }
-            rocket1.CheckDeath(rocket2, totalShot, totalAsteroid, totalBlackHole);
-            rocket2.CheckDeath(rocket1, totalShot, totalAsteroid, totalBlackHole);
+            //did someone die?
+            if (winner == "not")
+            {
+                rocket1.CheckDeath(rocket2, totalShot, totalAsteroid, totalBlackHole);
+                rocket2.CheckDeath(rocket1, totalShot, totalAsteroid, totalBlackHole);
+            }
+            //Who won
             if (winner == "not")
             {
                 switch (rocket1.GetDeath())
@@ -156,7 +170,7 @@ public class Battle : Scene
                                 winner = "not";
                                 break;
                             case false:
-                                winner = "player2";
+                                winner = "player1";
                                 break;
                         }
                         break;
@@ -164,7 +178,7 @@ public class Battle : Scene
                         switch (rocket2.GetDeath())
                         {
                             case true:
-                                winner = "player1";
+                                winner = "player2";
                                 break;
                             case false:
                                 winner = "draw";
@@ -173,6 +187,7 @@ public class Battle : Scene
                         break;
                 }
             }
+            //Contorls if anyone wins
             if (winner != "not")
             {
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_ENTER))

@@ -18,16 +18,6 @@ public class Start : Scene
 
     ClickBox controls = new ClickBox("Controls", 0, 0, 0, 0, Color.WHITE, Color.BLUE);
 
-    ClickBox multiplayer = new ClickBox("Mutiplayer", 0, 0, 0, 0, Color.WHITE, Color.GREEN);
-
-    ClickBox botFight = new ClickBox("Bot Fight", 0, 0, 0, 0, Color.WHITE, Color.GREEN);
-
-    ClickBox back = new ClickBox("Back", 0, 0, 0, 0, Color.RED, Color.GRAY);
-
-    ClickBox resolution = new ClickBox("Resolution", 0, 0, 0, 0, Color.WHITE, Color.GREEN);
-
-    ClickBox asteroids = new ClickBox("Asteroid", 0, 0, 0, 0, Color.WHITE, Color.GREEN);
-
     public Start()
     {
 
@@ -54,6 +44,7 @@ public class Start : Scene
     public override void Draw()
     {
         base.Draw();
+
         mainRocket.DrawRocket();
         if (keyhole == true)
         {
@@ -70,6 +61,7 @@ public class Start : Scene
     {
         base.Update();
         mainRocket.Movement();
+        //Fixes the buttons
         if (mainRocket.GetRocketPos().X >= int.Parse(WindowSize[0]) + int.Parse(WindowSize[0]) / 2)
         {
             mainRocket.ChangeRocketPos(new Vector2(-int.Parse(WindowSize[0]) / 2, int.Parse(WindowSize[1]) / 2));
@@ -81,6 +73,7 @@ public class Start : Scene
                 keyhole = true;
             }
         }
+        //What button is hoverd/ clicked
         Buttoncheck();
     }
 
