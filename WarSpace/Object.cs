@@ -23,6 +23,8 @@ abstract public class Object
 
     protected string[] WindowSize = File.ReadAllLines(@"resolution.txt");
 
+    protected Texture2D texture;
+
     public Vector2 GetPosition()
     {
         return position;
@@ -54,6 +56,11 @@ abstract public class Object
         speed += force.GetForce();
         //rotation += force.GetForce();
         return speed;
+    }
+
+    public Texture2D GetTexture()
+    {
+        return this.texture;
     }
 
 }

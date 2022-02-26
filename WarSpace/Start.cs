@@ -73,7 +73,7 @@ public class Start : Scene
                 keyhole = true;
             }
         }
-        //What button is hoverd/ clicked
+        //What button is hovered / clicked
         Buttoncheck();
     }
 

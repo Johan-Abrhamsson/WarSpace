@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Net.WebSockets;
 using System.Numerics;
 using System;
@@ -143,18 +144,22 @@ public class Rocket : Object
     {
         if (player == "player1")
         {
-            Raylib.DrawRectangle((int)hitBox.x, (int)hitBox.y, (int)hitBox.width, (int)hitBox.height, Color.BLUE);
-            Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.ORANGE);
+            //Raylib.DrawRectangle((int)hitBox.x, (int)hitBox.y, (int)hitBox.width, (int)hitBox.height, Color.BLUE);
+            //Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.ORANGE);
+            Raylib.DrawTexturePro(TextureCollection.rocketbase, new Rectangle(0, 0, TextureCollection.rocketbase.width / 5, TextureCollection.rocketbase.height / 5), new Rectangle(hitBox.x + hitBox.width / 2, hitBox.y + hitBox.height / 2, hitBox.width * 4, hitBox.height * 4), new Vector2(hitBox.width * 2, hitBox.height * 2), (angle * 57.2957795131f) + 90, Color.BLUE);
+            Console.WriteLine(angle);
         }
         else if (player == "player2")
         {
-            Raylib.DrawRectangle((int)hitBox.x, (int)hitBox.y, (int)hitBox.width, (int)hitBox.height, Color.RED);
-            Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.YELLOW);
+            //Raylib.DrawRectangle((int)hitBox.x, (int)hitBox.y, (int)hitBox.width, (int)hitBox.height, Color.RED);
+            //Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.YELLOW);
+            Raylib.DrawTexturePro(TextureCollection.rocketbase, new Rectangle(0, 0, TextureCollection.rocketbase.width / 5, TextureCollection.rocketbase.height / 5), new Rectangle(hitBox.x + hitBox.width / 2, hitBox.y + hitBox.height / 2, hitBox.width * 4, hitBox.height * 4), new Vector2(hitBox.width * 2, hitBox.height * 2), (angle * 57.2957795131f) + 90, Color.RED);
         }
         else
         {
-            Raylib.DrawRectangle((int)hitBox.x, (int)hitBox.y, (int)hitBox.width, (int)hitBox.height, Color.RED);
-            Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.YELLOW);
+            //Raylib.DrawRectangle((int)hitBox.x, (int)hitBox.y, (int)hitBox.width, (int)hitBox.height, Color.RED);
+            //Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.YELLOW);
+            Raylib.DrawTexturePro(TextureCollection.rocketbase, new Rectangle(0, 0, TextureCollection.rocketbase.width / 5, TextureCollection.rocketbase.height / 5), new Rectangle(hitBox.x + hitBox.width / 2, hitBox.y + hitBox.height / 2, hitBox.width * 4, hitBox.height * 4), new Vector2(hitBox.width * 2, hitBox.height * 2), (angle * 57.2957795131f) + 90, Color.WHITE);
         }
         Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y - 5, (int)(position.X + speed.X * 5) + (int)hitBox.width / 2, (int)position.Y - 5, Color.GREEN);
         Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y - 5, (int)position.X + (int)hitBox.width / 2, (int)(position.Y - 5 + speed.Y * 5), Color.PURPLE);
