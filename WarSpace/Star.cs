@@ -3,44 +3,40 @@ using System;
 using Raylib_cs;
 using System.IO;
 
-public class Star
+public class Star : Object
 {
-    float starForm;
 
-    Vector2 center;
-    Random generator = new Random();
     int distanceColoration;
 
     Color distance;
-    string[] WindowSize = File.ReadAllLines(@"resolution.txt");
+
 
 
     public Star()
     {
-        starForm = generator.Next(5, 15);
-        center.X = generator.Next(-int.Parse(WindowSize[0]), int.Parse(WindowSize[0]));
-        center.Y = generator.Next(-int.Parse(WindowSize[1]), int.Parse(WindowSize[1]));
+        radius = generator.Next(5, 15);
+        position.X = generator.Next(-int.Parse(WindowSize[0]), int.Parse(WindowSize[0]));
+        position.Y = generator.Next(-int.Parse(WindowSize[1]), int.Parse(WindowSize[1]));
         distanceColoration = generator.Next(90, 255);
         distance = new Color(distanceColoration, distanceColoration, distanceColoration, distanceColoration);
+        this.color = distance;
+        this.angle = (float)Math.PI * ((float)generator.Next(1, 628) / 100);
     }
 
-    public double GetSize()
-    {
-        return starForm;
-    }
 
     public void DrawStar()
     {
-        Raylib.DrawCircleV(center, starForm, distance);
-        center += new Vector2(0.03f, 0.03f);
-        if (center.X - (2 * starForm) >= int.Parse(WindowSize[0]) || center.Y - (2 * starForm) >= int.Parse(WindowSize[1]))
+        //Raylib.DrawCircleV(center, starForm, distance);
+        this.Drawing(3, 2);
+        position += new Vector2(0.03f, 0.03f);
+        if (position.X - (2 * radius) >= int.Parse(WindowSize[0]) || position.Y - (2 * radius) >= int.Parse(WindowSize[1]))
         {
-            center.X = generator.Next(-int.Parse(WindowSize[0]), int.Parse(WindowSize[0]));
-            center.Y = generator.Next(-int.Parse(WindowSize[1]), int.Parse(WindowSize[1]));
-            while (center.X >= 0 && center.Y >= 0)
+            position.X = generator.Next(-int.Parse(WindowSize[0]), int.Parse(WindowSize[0]));
+            position.Y = generator.Next(-int.Parse(WindowSize[1]), int.Parse(WindowSize[1]));
+            while (position.X >= 0 && position.Y >= 0)
             {
-                center.X = generator.Next(-int.Parse(WindowSize[0]), int.Parse(WindowSize[0]));
-                center.Y = generator.Next(-int.Parse(WindowSize[1]), int.Parse(WindowSize[1]));
+                position.X = generator.Next(-int.Parse(WindowSize[0]), int.Parse(WindowSize[0]));
+                position.Y = generator.Next(-int.Parse(WindowSize[1]), int.Parse(WindowSize[1]));
             }
 
         }

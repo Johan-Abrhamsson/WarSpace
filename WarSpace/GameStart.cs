@@ -1,4 +1,5 @@
 using System;
+using Raylib_cs;
 
 public class GameStart
 {
@@ -8,7 +9,7 @@ public class GameStart
 
     public void Start()
     {
-        mainWindow.Run(group);
+        mainWindow.Run(group, "");
 
     }
 

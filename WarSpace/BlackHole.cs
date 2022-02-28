@@ -21,6 +21,8 @@ public class BlackHole : Object
 
     public void DrawBlackHole()
     {
-        Raylib.DrawCircleV(position, radius, color);
+        //Raylib.DrawCircleV(position, radius, color);
+        this.Drawing(2, 2);
+        this.angle += 0.01f;
     }
 }

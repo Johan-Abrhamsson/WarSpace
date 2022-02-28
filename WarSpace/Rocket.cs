@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using System.Net.WebSockets;
 using System.Numerics;
 using System;
 using Raylib_cs;
@@ -17,6 +15,9 @@ public class Rocket : Object
     bool isAlive = true;
 
     List<Destroyed> deathShow = new List<Destroyed>();
+    Sound pew = Raylib.LoadSound("pew.ogg");
+
+    Sound explotion = Raylib.LoadSound("explotion.ogg");
 
     public Rocket(Vector2 positionNew, float angleNew, bool validMovementNew, string playerNew)
     {
@@ -27,7 +28,7 @@ public class Rocket : Object
         this.validMovement = validMovementNew;
         this.player = playerNew;
         this.hitBox = new Rectangle(position.X, position.Y, 10, 10);
-        accileration = new Vector2(0.05f, 0.05f);
+        accileration = new Vector2(0.03f, 0.0f);
     }
 
     public void Movement()
@@ -47,12 +48,12 @@ public class Rocket : Object
                 }
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT))
                 {
-                    angle -= accileration.X;
+                    angle -= accileration.X * 2;
                 }
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT))
                 {
-                    angle += accileration.X;
+                    angle += accileration.X * 2;
                 }
             }
             else if (player == "player2")
@@ -68,12 +69,12 @@ public class Rocket : Object
                 }
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
                 {
-                    angle -= accileration.X;
+                    angle -= accileration.X * 2;
                 }
 
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
                 {
-                    angle += accileration.X;
+                    angle += accileration.X * 2;
                 }
             }
         }
@@ -98,6 +99,7 @@ public class Rocket : Object
                         if (Raylib.IsKeyDown(KeyboardKey.KEY_PERIOD))
                         {
                             currentTicker = ticker;
+                            Raylib.PlaySound(pew);
                             return true;
                         }
                     }
@@ -106,6 +108,7 @@ public class Rocket : Object
                         if (Raylib.IsKeyDown(KeyboardKey.KEY_G))
                         {
                             currentTicker = ticker;
+                            Raylib.PlaySound(pew);
                             return true;
                         }
                     }
@@ -147,7 +150,6 @@ public class Rocket : Object
             //Raylib.DrawRectangle((int)hitBox.x, (int)hitBox.y, (int)hitBox.width, (int)hitBox.height, Color.BLUE);
             //Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.ORANGE);
             Raylib.DrawTexturePro(TextureCollection.rocketbase, new Rectangle(0, 0, TextureCollection.rocketbase.width / 5, TextureCollection.rocketbase.height / 5), new Rectangle(hitBox.x + hitBox.width / 2, hitBox.y + hitBox.height / 2, hitBox.width * 4, hitBox.height * 4), new Vector2(hitBox.width * 2, hitBox.height * 2), (angle * 57.2957795131f) + 90, Color.BLUE);
-            Console.WriteLine(angle);
         }
         else if (player == "player2")
         {
@@ -161,8 +163,8 @@ public class Rocket : Object
             //Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y + (int)hitBox.height / 2, (int)(position.X + rotation.X * 20) + (int)hitBox.width / 2, (int)(position.Y + rotation.Y * 20) + (int)hitBox.height / 2, Color.YELLOW);
             Raylib.DrawTexturePro(TextureCollection.rocketbase, new Rectangle(0, 0, TextureCollection.rocketbase.width / 5, TextureCollection.rocketbase.height / 5), new Rectangle(hitBox.x + hitBox.width / 2, hitBox.y + hitBox.height / 2, hitBox.width * 4, hitBox.height * 4), new Vector2(hitBox.width * 2, hitBox.height * 2), (angle * 57.2957795131f) + 90, Color.WHITE);
         }
-        Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y - 5, (int)(position.X + speed.X * 5) + (int)hitBox.width / 2, (int)position.Y - 5, Color.GREEN);
-        Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y - 5, (int)position.X + (int)hitBox.width / 2, (int)(position.Y - 5 + speed.Y * 5), Color.PURPLE);
+        //Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y - 5, (int)(position.X + speed.X * 5) + (int)hitBox.width / 2, (int)position.Y - 5, Color.GREEN);
+        //Raylib.DrawLine((int)position.X + (int)hitBox.width / 2, (int)position.Y - 5, (int)position.X + (int)hitBox.width / 2, (int)(position.Y - 5 + speed.Y * 5), Color.PURPLE);
     }
 
 
@@ -240,7 +242,8 @@ public class Rocket : Object
         validMovement = false;
         isAlive = false;
         int parts;
-        parts = generator.Next(3, 20);
+        parts = generator.Next(50, 300);
+        Raylib.PlaySound(explotion);
         for (int i = 0; i <= parts; i++)
         {
             Destroyed part = new Destroyed(position, speed, rotation);
@@ -248,7 +251,7 @@ public class Rocket : Object
         }
         for (int i = 0; i <= generator.Next(10, 40); i++)
         {
-            Raylib.DrawCircleV(position + new Vector2(hitBox.width / 2, hitBox.height / 2) + new Vector2(generator.Next(-20, 20), generator.Next(-20, 20)), generator.Next(1, 9), new Color(generator.Next(130, 255), generator.Next(0, 255), generator.Next(0, 90), generator.Next(1, 255)));
+            Raylib.DrawCircleV(position + new Vector2(hitBox.width / 2, hitBox.height / 2) + new Vector2(generator.Next(-100, 100), generator.Next(-100, 100)), generator.Next(20, 30), new Color(generator.Next(130, 255), generator.Next(0, 255), generator.Next(0, 90), generator.Next(175, 255)));
         }
     }
 

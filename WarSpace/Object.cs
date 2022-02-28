@@ -23,7 +23,7 @@ abstract public class Object
 
     protected string[] WindowSize = File.ReadAllLines(@"resolution.txt");
 
-    protected Texture2D texture;
+    protected Vector2 textureValue;
 
     public Vector2 GetPosition()
     {
@@ -58,9 +58,8 @@ abstract public class Object
         return speed;
     }
 
-    public Texture2D GetTexture()
+    public void Drawing(int pictureValueX, int pictureValueY)
     {
-        return this.texture;
+        Raylib.DrawTexturePro(TextureCollection.other, new Raylib_cs.Rectangle(((pictureValueX - 1) * (TextureCollection.other.width / 3)), ((pictureValueY - 1) * (TextureCollection.other.height / 3)), TextureCollection.other.width / 3, TextureCollection.other.height / 3), new Raylib_cs.Rectangle(position.X, position.Y, radius * 2, radius * 2), new Vector2(radius, radius), (angle * 57.2957795131f) + 90, this.color);
     }
-
 }
